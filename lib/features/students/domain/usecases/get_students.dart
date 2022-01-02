@@ -10,7 +10,7 @@ class GetStudents extends GetAllUseCase<List<Student>> {
   GetStudents(this.repository);
 
   @override
-  Future<Either<Failure, List<Student>>> call() async {
-    return await repository.getStudents();
+  Future<Either<Failure, List<Student>>> call() {
+    return repository.getStudents();
   }
 }
