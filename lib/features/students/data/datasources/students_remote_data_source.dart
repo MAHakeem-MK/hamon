@@ -16,14 +16,14 @@ class StudentsRemoteDataSourceImpl implements StudentsRemoteDataSource {
     return client
         .get(
       Uri.parse(
-        'https://hamon-interviewapi.herokuapp.com/student/$id?api_key=6c5Fc',
+        'https://hamon-interviewapi.herokuapp.com/students/$id?api_key=6c5Fc',
       ),
     )
         .then((response) {
       if (response.statusCode == 200) {
         return StudentModel.fromJson(json.decode(response.body));
       } else {
-        throw Exception('Failed to load content');
+        throw Exception('Failed to load content ${response.statusCode}');
       }
     });
   }
