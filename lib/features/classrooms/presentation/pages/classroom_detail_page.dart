@@ -4,8 +4,13 @@ import 'package:hamon/core/platform/network_info.dart';
 import 'package:hamon/features/classrooms/data/datasources/classrooms_remote_data_source.dart';
 import 'package:hamon/features/classrooms/data/repositories/classroom_repository_impl.dart';
 import 'package:hamon/features/classrooms/domain/entities/classroom_type.dart';
+import 'package:hamon/features/classrooms/domain/usecases/assign_subject.dart';
 import 'package:hamon/features/classrooms/domain/usecases/get_classroom.dart';
 import 'package:hamon/features/classrooms/presentation/bloc/classroom_bloc.dart';
+import 'package:hamon/features/subjects/data/datasources/subjects_remote_data_source.dart';
+import 'package:hamon/features/subjects/data/repositories/subjects_repository_impl.dart';
+import 'package:hamon/features/subjects/presentation/bloc/subject_bloc.dart';
+import 'package:hamon/features/subjects/presentation/pages/subjects_page.dart';
 import 'package:http/http.dart' as http;
 
 class ClassroomDetailPage extends StatelessWidget {
@@ -14,18 +19,7 @@ class ClassroomDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ClassroomBloc(
-        GetClassroom(
-          ClassroomRepositoryImpl(
-              remoteDataSource: ClassroomsRemoteDataSourceImpl(
-                client: http.Client(),
-              ),
-              networkInfo: NetworkInfo()),
-        ),
-      ),
-      child: _ClassroomDetailView(id: id),
-    );
+    return _ClassroomDetailView(id: id);
   }
 }
 
@@ -69,6 +63,7 @@ class __ClassroomDetailViewState extends State<_ClassroomDetailView> {
             );
           }
           if (state is ClassroomLoaded) {
+            print("loaded");
             return Container(
               padding: const EdgeInsets.all(16),
               alignment: Alignment.topCenter,
@@ -79,9 +74,31 @@ class __ClassroomDetailViewState extends State<_ClassroomDetailView> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(state.classroom.name, style: _textTheme.headline4),
+                      Text(state.classroom.subject,
+                          style: _textTheme.subtitle1),
                       const Divider(),
                       _getClassroomLayout(
-                          state.classroom.layout, state.classroom.size)
+                        state.classroom.layout,
+                        state.classroom.size,
+                      ),
+                      ButtonBar(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return SubjectsPage(
+                                        classId: state.classroom.id);
+                                  },
+                                  fullscreenDialog: true,
+                                ),
+                              );
+                            },
+                            child: const Text('Assign Subject'),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
@@ -171,7 +188,7 @@ class ConferenceLayout extends StatelessWidget {
                     height: 50,
                     decoration: BoxDecoration(
                       color: Colors.grey,
-                      border: Border.all(color:Colors.blue, width: 2),
+                      border: Border.all(color: Colors.blue, width: 2),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),

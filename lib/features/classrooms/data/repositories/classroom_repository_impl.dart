@@ -39,4 +39,18 @@ class ClassroomRepositoryImpl extends ClassroomRepository {
       return Future.value(Left(NetworkFailure()));
     }
   }
+
+  @override
+  Future<Either<Failure, Classroom>> assignSubject(int classroomId, int subjectId) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final classRoom = await remoteDataSource.assignSubject(classroomId, subjectId);
+        return Right(classRoom);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Future.value(Left(NetworkFailure()));
+    }
+  }
 }

@@ -6,3 +6,5 @@ abstract class SubjectsEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class GetSubjectsEvent extends SubjectsEvent {}

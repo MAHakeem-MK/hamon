@@ -33,5 +33,5 @@ class Classroom extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [id, name, subject, layout, size];
 }

@@ -14,7 +14,7 @@ class ClassroomModel extends Classroom {
     return ClassroomModel(
       id: json['id'],
       name: json['name'] ?? '',
-      subject: json['subject'] ?? '',
+      subject: json['subject'].toString(),
       layout: convertToLayoutType((json['layout'] ?? '').toString()),
       size: json['size'] ?? '',
     );
