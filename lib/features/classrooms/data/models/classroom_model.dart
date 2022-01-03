@@ -1,4 +1,5 @@
 import 'package:hamon/features/classrooms/domain/entities/classroom.dart';
+import 'package:hamon/features/classrooms/util/classroom_layout_converter.dart';
 
 class ClassroomModel extends Classroom {
   const ClassroomModel({
@@ -7,14 +8,14 @@ class ClassroomModel extends Classroom {
     required subject,
     required layout,
     required size,
-  }):super(id: id, name: name, subject: subject, layout: layout, size: size);
+  }) : super(id: id, name: name, subject: subject, layout: layout, size: size);
 
   factory ClassroomModel.fromJson(Map<String, dynamic> json) {
     return ClassroomModel(
       id: json['id'],
       name: json['name'] ?? '',
       subject: json['subject'] ?? '',
-      layout: json['layout'] ?? '',
+      layout: convertToLayoutType((json['layout'] ?? '').toString()),
       size: json['size'] ?? '',
     );
   }
@@ -24,8 +25,9 @@ class ClassroomModel extends Classroom {
       'id': id,
       'name': name,
       'subject': subject,
-      'layout': layout,
+      'layout': convertToString(layout),
       'size': size,
     };
   }
+  
 }

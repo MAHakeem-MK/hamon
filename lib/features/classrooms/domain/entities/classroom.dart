@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:hamon/features/classrooms/domain/entities/classroom_type.dart';
 
 class Classroom extends Equatable {
   final int id;
   final String name;
   final String subject;
-  final String layout;
+  final ClassroomType layout;
   final int size;
 
   const Classroom({
@@ -19,7 +20,7 @@ class Classroom extends Equatable {
     int? id,
     String? name,
     String? subject,
-    String? layout,
+    ClassroomType? layout,
     int? size,
   }) {
     return Classroom(
